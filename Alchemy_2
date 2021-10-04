@@ -14,6 +14,7 @@ c = character()
 cv, cs = c.cvars, c.skills
 sl, fl = "**Success!**", "**Failure!**"
 name_of_potion = args[0]
+fields = []
 
 found_potion = None
 is_magical = False
@@ -32,32 +33,32 @@ if found_potion != None:
     adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
     a_roll = vroll(cs.arcana.d20())
     succ = a_roll.total > magical_dc
-    f = f'{c.name} combines strange ingredients in secret ways to try and make marvelous substances…|**Arcana Check:** {a_roll.full}\n{sl if succ else fl}’
+    fields.append(f'{c.name} combines strange ingredients in secret ways to try and make marvelous substances…|**Arcana Check:** {a_roll.full}\n{sl if succ else fl}’)
     if succ:
-      f2 = f'{c.name} manages to harness the magic necessary to make {found_potion}.'
+      fields.append({c.name} manages to harness the magic necessary to make {found_potion}.')
       c_roll = vroll(cs.dexterity.proficiencyBonus.d20(base_adv = adv_status))
       succ = c_roll.total > mtool_DC
       t = f'{c.name} tries to finish the potion!'
-      f = f’{c.name} combines strange ingredients in secret ways to try and make some {found_potion}…|**Alchemist's Tool Check:** {c_roll.full}\n{sl if succ else fl}’
+      fields.append(f’{c.name} combines strange ingredients in secret ways to try and make some {found_potion}…|**Alchemist's Tool Check:** {c_roll.full}\n{sl if succ else fl}’)
       if succ:
-        f2 = f'{c.name} was successful and can add 1 day to the counter for this potion!'
+        fields.append(f'{c.name} was successful and can add 1 day to the counter for this potion!')
      else:
-        f2 = f'{c.name} was not able to craft this potion today. Try again tomorrow!'
+        fields.append(f'{c.name} was not able to craft this potion today. Try again tomorrow!')
     else:
-      f2: = f'{c.name} was unable to summon enough magic to brew up some {found_mpotion}! Try again tomorrow'
+      fields.append(f'{c.name} was unable to summon enough magic to brew up some {found_mpotion}! Try again tomorrow')
   else
     mundane_DC = found_potion["DC (Tool Check)"]
     adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
     m_roll = vroll(cs.dexterity.d20(base_adv = adv_status))
     succ = m_roll.total > mundane_DC
     t = f'{c.name} tries to brew a potion!'
-    f = f’{c.name} combines strange ingredients in secret ways to try and make some {found_potion}…|**Alchemist's Tool Check:** {m_roll.full}\n{sl if succ else fl}’
+    fields.append(f’{c.name} combines strange ingredients in secret ways to try and make some {found_potion}…|**Alchemist's Tool Check:** {m_roll.full}\n{sl if succ else fl}’)
     if succ:
-      f2 = f'{c.name} was successful and can add 1 day to the counter for this potion!
+      fields.append(f'{c.name} was successful and can add 1 day to the counter for this potion!)
     else:
-      f2 = f'{c.name} was not able to craft this potion today. Try again tomorrow!'
+      fields.append(f'{c.name} was not able to craft this potion today. Try again tomorrow!')
 else:
-  f = 'Oops! There isn't a potion or poison by that name!'
+  fields.append(f'Oops! There isn't a potion or poison by that name!')
     
 
 #Variables that are for display in the embed only- need to figure out how to have each variable pull from both dictionaires since found_potion and found_mpotion are different
@@ -79,3 +80,4 @@ thumb = "https://cdn.discordapp.com/attachments/883556742225604649/8932004610610
 {{f'-f "{f2}"' if f2 else ""}}
 {{f'-color "{color}"' if color else ""}}
 {{f'-footer "{footer}"' if footer else ""}}
+{{''.join(['-f "' + field + '"\n' for field in fields]) if len(fields) > 0 else ''}}
