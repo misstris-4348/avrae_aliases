@@ -52,7 +52,7 @@ if succ:
 else:
   f2: = f'{c.name} was unable to summon enough magic to brew up some {found_mpotion}! Try again tomorrow'
     
-elif p == 'craft':
+elif args[0] == 'craft':
   adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
   c_roll = vroll(cs.dexterity.d20(base_adv = adv_status))
   succ = c_roll.total > mtool_DC
