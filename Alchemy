@@ -1,0 +1,64 @@
+!alias alchemy embed
+<drac2>
+
+#Load the gvar with mundane items and convert to variable mundane_items
+mundane_items = load_json(get_gvar("09b59f1f-2369-496f-96df-d7c26cb3f28d"))
+
+#Load the gvar with magical items and convert to variable magical_items
+magical_items = load_json(get_gvar("58700261-a233-4164-944e-cbd5aad8ceb8"))
+
+# Code
+args = &ARGS&
+pargs = argparse(args)
+c = character()
+cv, cs = c.cvars, c.skills
+p = args[0]
+sl, fl = "**Success!**", "**Failure!**"
+name_of_potion = 
+
+#Iterate over the items in mundane items- If the name of an item matches potion_name, store it in a variable: found_potion
+found_potion = None
+for item in mundane_items:
+  if item["Name"] == name_of_potion:
+    found_potion = item
+#If found_item has a value (!= None), it means there's a match
+
+#Check the DC of found_item, store it in a variable: mundane_dc
+mundane_DC = found_potion["DC (Tool Check)"]
+
+#Tell avrae to perform a dex check using that dc
+if p == found_potion
+  adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
+  m_roll = vroll(cs.dexterity.d20(base_adv = adv_status))
+  succ = m_roll.total > mundane_DC
+  t = f'{c.name} tries to brew a potion!'
+  f = f’{c.name} combines strange ingredients in secret ways to try and make some {found_potion}…|**Alchemist's Tool Check:** {m_roll.full}\n{sl if succ else fl}’
+  
+#If found_item has no value (== None), there's no match- Iterate over the items in magical items:If the name of an item matches potion_name, store it in found_potion
+for item in magical_items:
+  if item[“Name”] == name_of_potion:
+    found_mpotion = item
+
+#Store the DC in a variable magical_DC and mtool_DC
+magical_dc = found_mpotion["ArcanaDC"]
+mtool_DC = found_mpotion["ToolDC"]
+
+#Tell Avrae to perform an arcana chek using that DC
+a_roll = vroll(cs.arcana.d20())
+succ = a_roll.total > magical_dc
+f = f'{c.name} combines strange ingredients in secret ways to try and make marvelous substances…|**Arcana Check:** {a_roll.full}\n{sl if succ else fl}’
+if succ:
+  f2 = f'{c.name} manages to harness the magic necessary to make {found_mpotion}.'
+    f2 += '|Use `!alchemy craft` to see if you are able to craft the {found_mpotion}!'
+else:
+  f2: = f'{c.name} was unable to summon enough magic to brew up some {found_mpotion}! Try again tomorrow'
+    
+elif p == 'craft':
+  adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
+  c_roll = vroll(cs.dexterity.d20(base_adv = adv_status))
+  succ = m_roll.total > mundane_DC
+  t = f'{c.name} tries to finish the potion!'
+  f = f’{c.name} combines strange ingredients in secret ways to try and make some {found_mpotion}…|**Alchemist's Tool Check:** {c_roll.full}\n{sl if succ else fl}’
+  
+  
+</drac2>    
