@@ -36,7 +36,7 @@ if found_potion != None:
     fields.append(f'{c.name} combines strange ingredients in secret ways to try and make marvelous substances…|**Arcana Check:** {a_roll.full}\n{sl if succ else fl}’)
     if succ:
       fields.append({c.name} manages to harness the magic necessary to make {found_potion}.')
-      c_roll = vroll(cs.dexterity.proficiencyBonus.d20(base_adv = adv_status))
+      c_roll = vroll(cs.dexterity.d20(base_adv = adv_status) + f' + {proficiencyBonus}')
       succ = c_roll.total > mtool_DC
       t = f'{c.name} tries to finish the potion!'
       fields.append(f’{c.name} combines strange ingredients in secret ways to try and make some {found_potion}…|**Alchemist's Tool Check:** {c_roll.full}\n{sl if succ else fl}’)
@@ -49,7 +49,7 @@ if found_potion != None:
   else
     mundane_DC = found_potion["DC (Tool Check)"]
     adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
-    m_roll = vroll(cs.dexterity.d20(base_adv = adv_status))
+    m_roll = vroll(cs.dexterity.d20(base_adv = adv_status) + f' + {proficiencyBonus}')
     succ = m_roll.total > mundane_DC
     t = f'{c.name} tries to brew a potion!'
     fields.append(f’{c.name} combines strange ingredients in secret ways to try and make some {found_potion}…|**Alchemist's Tool Check:** {m_roll.full}\n{sl if succ else fl}’)
