@@ -12,9 +12,8 @@ args = &ARGS&
 pargs = argparse(args)
 c = character()
 cv, cs = c.cvars, c.skills
-p = args[0]
 sl, fl = "**Success!**", "**Failure!**"
-name_of_potion = 
+name_of_potion = args[0]
 
 #Iterate over the items in mundane items- If the name of an item matches potion_name, store it in a variable: found_potion
 found_potion = None
@@ -27,7 +26,7 @@ for item in mundane_items:
 mundane_DC = found_potion["DC (Tool Check)"]
 
 #Tell avrae to perform a dex check using that dc
-if p == found_potion
+found_potion != None
   adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
   m_roll = vroll(cs.dexterity.d20(base_adv = adv_status))
   succ = m_roll.total > mundane_DC
@@ -56,7 +55,7 @@ else:
 elif p == 'craft':
   adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
   c_roll = vroll(cs.dexterity.d20(base_adv = adv_status))
-  succ = m_roll.total > mundane_DC
+  succ = c_roll.total > mtool_DC
   t = f'{c.name} tries to finish the potion!'
   f = f’{c.name} combines strange ingredients in secret ways to try and make some {found_mpotion}…|**Alchemist's Tool Check:** {c_roll.full}\n{sl if succ else fl}’
   
