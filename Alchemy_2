@@ -20,10 +20,10 @@ t = f'{c.name} tries to brew a potion!'
 found_potion = None
 is_magical = False
 for item in mundane_items:
-  if item["Name"] == name_of_potion:
+  if item['Name'] == name_of_potion:
     found_potion = item
 for item in magical_items:
-  if item[“Name”] == name_of_potion:
+  if item['Name'] == name_of_potion:
     found_potion = item
     is_magical = True
     
