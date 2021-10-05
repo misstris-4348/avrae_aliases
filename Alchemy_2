@@ -15,6 +15,7 @@ cv, cs = c.cvars, c.skills
 sl, fl = "**Success!**", "**Failure!**"
 name_of_potion = args[0]
 fields = []
+t = f'{c.name} tries to brew a potion!'
 
 found_potion = None
 is_magical = False
@@ -46,8 +47,7 @@ if found_potion != None:
       fields.append("{c.name} manages to harness the magic necessary to make {found_potion}.")
       c_roll = vroll(cs.dexterity.d20(base_adv = adv_status) + f' + {proficiencyBonus}')
       succ = c_roll.total >= mtool_DC
-      t = f'{c.name} tries to finish the potion!'
-      fields.append("{c.name} combines strange ingredients in secret ways to try and make some {found_potion}…|**Alchemist's Tool Check:** {c_roll.full}\n{sl if succ else fl}’")
+        fields.append("{c.name} combines strange ingredients in secret ways to try and make some {found_potion}…|**Alchemist's Tool Check:** {c_roll.full}\n{sl if succ else fl}’")
       if succ:
         fields.append(f'{c.name} was successful and can add 1 day to the counter for this potion!')
      else:
@@ -66,7 +66,6 @@ if found_potion != None:
     adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
     m_roll = vroll(cs.dexterity.d20(base_adv = adv_status) + f' + {proficiencyBonus}')
     succ = m_roll.total >= mundane_DC
-    t = f'{c.name} tries to brew a potion!'
     fields.append("{c.name} combines strange ingredients in secret ways to try and make some {found_potion}…|**Alchemist's Tool Check:** {m_roll.full}\n{sl if succ else fl}")
     if succ:
       fields.append("{c.name} was successful and can add 1 day to the counter for this potion!")
