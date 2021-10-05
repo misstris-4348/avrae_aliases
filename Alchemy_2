@@ -84,15 +84,12 @@ Value = found_potion["Retail Price"]
 Days = found_potion["Number of Crafting Days"]
 Rarity = found_potion["Rarity"]
 footer = "Seventra: Exodus of Heroes | Alchemy | Created by misstris4348 (aka Gaelin) and quiversong#2772 (aka Adrienne)"
-thumb = "https://cdn.discordapp.com/attachments/883556742225604649/893200461061062656/a2ed9af72102c531003e42d55dc4c710.png"
-  
+image = "https://cdn.discordapp.com/attachments/883556742225604649/893200461061062656/a2ed9af72102c531003e42d55dc4c710.png"
+color = '702963'  
 </drac2>    
 
 -title "{{t}}"
 {{f'-image "{img}"' if img else ""}}
-{{f'-thumb "{thumb}"' if thumb else ""}}
-{{f'-f "{f}"' if f else ""}}
-{{f'-f "{f2}"' if f2 else ""}}
 {{f'-color "{color}"' if color else ""}}
 {{f'-footer "{footer}"' if footer else ""}}
 {{''.join(['-f "' + field + '"\n' for field in fields]) if len(fields) > 0 else ''}}
