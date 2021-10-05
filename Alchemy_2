@@ -34,7 +34,8 @@ if found_potion != None:
     Cost = found_potion["Crafting Price"]
     Value = found_potion["Retail Price"]
     Days = found_potion["Number of Crafting Days"]
-    fields.append("{c.name} brews {Name} which has the following properties: **Method:**{Method}\n**Cost:**{Cost}\n**Value:**{Value}\n**Effect:**{Effect}\nIt will take {Days} days to make.")
+    Rarity = found_potion["Rarity"]
+    fields.append("{c.name} brews {Name} which has the following properties: **Method:**{Method}\n**Cost:**{Cost}\n**Rarity:**{Rarity}\n**Value:**{Value}\n**Effect:**{Effect}\nIt will take {Days} days to make.")
     magical_dc = found_potion["ArcanaDC"]
     mtool_DC = found_potion["ToolDC"]
     adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
