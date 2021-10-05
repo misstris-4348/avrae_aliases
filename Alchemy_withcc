@@ -1,0 +1,94 @@
+!alias alchemy embed
+<drac2>
+
+#Load the gvar with mundane items and convert to variable mundane_items
+mundane_items = load_json(get_gvar("09b59f1f-2369-496f-96df-d7c26cb3f28d"))
+
+#Load the gvar with magical items and convert to variable magical_items
+magical_items = load_json(get_gvar("58700261-a233-4164-944e-cbd5aad8ceb8"))
+
+# Code
+args = &ARGS&
+pargs = argparse(args)
+c = character()
+cv, cs = c.cvars, c.skills
+sl, fl = "**Success!**", "**Failure!**"
+name_of_potion = args[0]
+fields = []
+t = f'{c.name} tries to brew a potion!'
+
+found_potion = None
+is_magical = False
+for item in mundane_items:
+  if item['Name'] == name_of_potion:
+    found_potion = item
+for item in magical_items:
+  if item['Name'] == name_of_potion:
+    found_potion = item
+    is_magical = True
+    
+if found_potion != None:
+  if is_magical:
+    Name = found_potion["Name"]
+    Effect = found_potion["Effect"]
+    Method = found_potion["Method"]
+    Cost = found_potion["Crafting Price"]
+    Value = found_potion["Retail"]
+    Days = found_potion["Days"]
+    Rarity = found_potion["Rarity"]
+    fields.append(f"{c.name} brews {Name} which has the following properties:\n**Method:**{Method}\n**Cost:**{Cost}\n**Rarity:**{Rarity}\n**Value:**{Value}\n**Effect:**{Effect}\nIt will take {Days} days to make.")
+    magical_dc = found_potion["ArcanaDC"]
+    mtool_DC = found_potion["ToolDC"]
+    character().create_cc_nx({Name},0,{Days},None,None)
+    adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
+    a_roll = vroll(cs.arcana.d20())
+    succ = a_roll.total  >= magical_dc
+    fields.append(f'{c.name} combines strange ingredients in secret ways to try and make marvelous substances…|**Arcana Check:** {a_roll.full}\n{sl if succ else fl}')
+    if succ:
+      fields.append(f"{c.name} manages to harness the magic necessary to make {Name}.")
+      c_roll = vroll(cs.dexterity.d20(base_adv = adv_status) + f' + {proficiencyBonus}')
+      succ = c_roll.total >= mtool_DC
+      fields.append(f"{c.name} combines strange ingredients in secret ways to try and make some {Name}…|**Alchemist's Tool Check:** {c_roll.full}\n{sl if succ else fl}’")
+      if succ:
+        fields.append(f'{c.name} was successful and can add 1 day to the counter for this potion!')
+        if character().cc_exists:
+          character().mod_cc({Name},1)
+      else:
+        fields.append(f"{c.name} was not able to craft this potion today. Try again tomorrow!")
+    else:
+      fields.append(f"{c.name} was unable to summon enough magic to brew up some {Name}! Try again tomorrow")
+  else:
+    Name = found_potion["Name"]
+    Method = found_potion["Method"]
+    Effect = found_potion["Effect"]
+    Cost = found_potion["Crafting Price"]
+    Value = found_potion["Retail Price"]
+    Days = found_potion["Number of Crafting Days"]
+    character().create_cc_nx({Name},0,{Days},None,None)
+    fields.append(f"{c.name} brews {Name} which has the following properties:\n**Method:**{Method}\n**Cost:**{Cost}\n**Value:**{Value}\n**Effect:**{Effect}\nIt will take {Days} days to make.")
+    mundane_DC = found_potion["DC (Tool Check)"]
+    adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
+    m_roll = vroll(cs.dexterity.d20(base_adv = adv_status) + f' + {proficiencyBonus}')
+    succ = m_roll.total >= mundane_DC
+    fields.append(f"{c.name} combines strange ingredients in secret ways to try and make some {Name}…|**Alchemist's Tool Check:** {m_roll.full}\n{sl if succ else fl}")
+    if succ:
+      fields.append(f"{c.name} was successful and can add 1 day to the counter for this potion!")
+      if character().cc_exists:
+        character().mod_cc({Name},1)
+    else:
+      fields.append(f"{c.name} was not able to craft this potion today. Try again tomorrow!")
+else:
+  fields.append(f"Oops! There isn't a potion or poison by that name!")
+    
+
+#Variables that are for display in the embed only- need to figure out how to have each variable pull from both dictionaires since found_potion and found_mpotion are different
+footer = "Seventra: Exodus of Heroes | Alchemy | Created by misstris4348 (aka Gaelin) and quiversong#2772 (aka Adrienne)"
+img = "https://cdn.discordapp.com/attachments/883556742225604649/893200461061062656/a2ed9af72102c531003e42d55dc4c710.png"
+color = '702963'  
+</drac2>    
+
+-title "{{t}}"
+{{f'-image "{img}"' if img else ""}}
+{{f'-color "{color}"' if color else ""}}
+{{f'-footer "{footer}"' if footer else ""}}
+{{''.join(['-f "' + field + '"\n' for field in fields]) if len(fields) > 0 else ''}}
