@@ -39,7 +39,6 @@ if found_potion != None:
     fields.append(f"{c.name} brews {Name} which has the following properties:\n**Method:**{Method}\n**Cost:**{Cost}\n**Rarity:**{Rarity}\n**Value:**{Value}\n**Effect:**{Effect}\nIt will take {Days} days to make.")
     magical_dc = found_potion["ArcanaDC"]
     mtool_DC = found_potion["ToolDC"]
-    character().create_cc_nx({Name},0,{Days},None,None)
     adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
     a_roll = vroll(cs.arcana.d20())
     succ = a_roll.total  >= magical_dc
@@ -50,9 +49,13 @@ if found_potion != None:
       succ = c_roll.total >= mtool_DC
       fields.append(f"{c.name} combines strange ingredients in secret ways to try and make some {Name}…|**Alchemist's Tool Check:** {c_roll.full}\n{sl if succ else fl}’")
       if succ:
-        fields.append(f'{c.name} was successful and can add 1 day to the counter for this potion!')
-        if character().cc_exists:
-          character().mod_cc({Name},1)
+        fields.append(f'{c.name} was successful!')
+        c.create_cc_nx(Name,0,Days,None,None)
+        c.mod_cc(Name, +1)
+        fields.append(f'You have completed {c.cc_str(Name)} days.')
+        if c.get_cc(Name) == Days:
+          fields.append(f'Congrats, this potion is finished!')
+        else: None
       else:
         fields.append(f"{c.name} was not able to craft this potion today. Try again tomorrow!")
     else:
@@ -64,7 +67,6 @@ if found_potion != None:
     Cost = found_potion["Crafting Price"]
     Value = found_potion["Retail Price"]
     Days = found_potion["Number of Crafting Days"]
-    character().create_cc_nx({Name},0,{Days},None,None)
     fields.append(f"{c.name} brews {Name} which has the following properties:\n**Method:**{Method}\n**Cost:**{Cost}\n**Value:**{Value}\n**Effect:**{Effect}\nIt will take {Days} days to make.")
     mundane_DC = found_potion["DC (Tool Check)"]
     adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
@@ -72,9 +74,13 @@ if found_potion != None:
     succ = m_roll.total >= mundane_DC
     fields.append(f"{c.name} combines strange ingredients in secret ways to try and make some {Name}…|**Alchemist's Tool Check:** {m_roll.full}\n{sl if succ else fl}")
     if succ:
-      fields.append(f"{c.name} was successful and can add 1 day to the counter for this potion!")
-      if character().cc_exists:
-        character().mod_cc({Name},1)
+      fields.append(f"{c.name} was successful!")
+      c.create_cc_nx(Name,0,Days,None,None)
+      c.mod_cc(Name, +1)
+      fields.append(f'You have completed {c.cc_str(Name)} days.')
+      if c.get_cc(Name) == Days:
+        fields.append(f'Congrats, this potion is finished!')
+      else: None
     else:
       fields.append(f"{c.name} was not able to craft this potion today. Try again tomorrow!")
 else:
