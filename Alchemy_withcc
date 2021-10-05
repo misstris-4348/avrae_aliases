@@ -50,8 +50,12 @@ if found_potion != None:
       fields.append(f"{c.name} combines strange ingredients in secret ways to try and make some {Name}…|**Alchemist's Tool Check:** {c_roll.full}\n{sl if succ else fl}’")
       if succ:
         fields.append(f'{c.name} was successful!')
-        c.create_cc_nx(Name,0,Days,None,None)
-        c.mod_cc(Name, +1)
+        if c.cc_exists(Name):
+          c.mod_cc(Name, +1)
+        else:
+          c.create_cc(Name,0,Days,None,None)
+          c.set_cc(Name,0)
+          c.mod_cc(Name, +1)
         fields.append(f'You have completed {c.cc_str(Name)} days.')
         if c.get_cc(Name) == Days:
           fields.append(f'Congrats, this potion is finished!')
@@ -75,8 +79,12 @@ if found_potion != None:
     fields.append(f"{c.name} combines strange ingredients in secret ways to try and make some {Name}…|**Alchemist's Tool Check:** {m_roll.full}\n{sl if succ else fl}")
     if succ:
       fields.append(f"{c.name} was successful!")
-      c.create_cc_nx(Name,0,Days,None,None)
-      c.mod_cc(Name, +1)
+      if c.cc_exists(Name):
+        c.mod_cc(Name, +1)
+      else:
+        c.create_cc(Name,0,Days,None,None)
+        c.set_cc(Name,0)
+        c.mod_cc(Name, +1)
       fields.append(f'You have completed {c.cc_str(Name)} days.')
       if c.get_cc(Name) == Days:
         fields.append(f'Congrats, this potion is finished!')
