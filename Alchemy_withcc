@@ -36,7 +36,7 @@ if found_potion != None:
     Value = found_potion["Retail"]
     Days = found_potion["Days"]
     Rarity = found_potion["Rarity"]
-    fields.append(f"{c.name} brews {Name} which has the following properties:\n**Method:**{Method}\n**Cost:**{Cost}\n**Rarity:**{Rarity}\n**Value:**{Value}\n**Effect:**{Effect}\nIt will take {Days} days to make.")
+    fields.append(f"{c.name} brews {Name} which has the following properties:|\n**Method:** {Method}\n**Cost:** {Cost}\n**Rarity:** {Rarity}\n**Value:** {Value}\n**Effect:** {Effect}\nIt will take **{Days}** day(s) to make.")
     magical_dc = found_potion["ArcanaDC"]
     mtool_DC = found_potion["ToolDC"]
     adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
@@ -49,21 +49,20 @@ if found_potion != None:
       succ = c_roll.total >= mtool_DC
       fields.append(f"{c.name} combines strange ingredients in secret ways to try and make some {Name}…|**Alchemist's Tool Check:** {c_roll.full}\n{sl if succ else fl}’")
       if succ:
-        fields.append(f'{c.name} was successful!')
         if c.cc_exists(Name):
           c.mod_cc(Name, +1)
         else:
           c.create_cc(Name,0,Days,None,None)
           c.set_cc(Name,0)
           c.mod_cc(Name, +1)
-        fields.append(f'You have completed {c.cc_str(Name)} days.')
+        fields.append(f'You have completed:| {c.cc_str(Name)} days.')
         if c.get_cc(Name) == Days:
-          fields.append(f'Congrats, this potion is finished!')
+          fields.append(f'Congrats|This potion is finished!')
         else: None
       else:
-        fields.append(f"{c.name} was not able to craft this potion today. Try again tomorrow!")
+        fields.append(f"{c.name} was not able to craft this potion today|Try again tomorrow!")
     else:
-      fields.append(f"{c.name} was unable to summon enough magic to brew up some {Name}! Try again tomorrow")
+      fields.append(f"{c.name} was unable to summon enough magic to brew up some {Name}!|Try again tomorrow")
   else:
     Name = found_potion["Name"]
     Method = found_potion["Method"]
@@ -71,26 +70,25 @@ if found_potion != None:
     Cost = found_potion["Crafting Price"]
     Value = found_potion["Retail Price"]
     Days = found_potion["Number of Crafting Days"]
-    fields.append(f"{c.name} brews {Name} which has the following properties:\n**Method:**{Method}\n**Cost:**{Cost}\n**Value:**{Value}\n**Effect:**{Effect}\nIt will take {Days} days to make.")
+    fields.append(f"{c.name} brews {Name} which has the following properties:|\n**Method:** {Method}\n**Cost:** {Cost}\n**Value:** {Value}\n**Effect:** {Effect}\nIt will take **{Days}** day(s) to make.")
     mundane_DC = found_potion["DC (Tool Check)"]
     adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
     m_roll = vroll(cs.dexterity.d20(base_adv = adv_status) + f' + {proficiencyBonus}')
     succ = m_roll.total >= mundane_DC
     fields.append(f"{c.name} combines strange ingredients in secret ways to try and make some {Name}…|**Alchemist's Tool Check:** {m_roll.full}\n{sl if succ else fl}")
     if succ:
-      fields.append(f"{c.name} was successful!")
       if c.cc_exists(Name):
         c.mod_cc(Name, +1)
       else:
         c.create_cc(Name,0,Days,None,None)
         c.set_cc(Name,0)
         c.mod_cc(Name, +1)
-      fields.append(f'You have completed {c.cc_str(Name)} days.')
+      fields.append(f'You have completed:| {c.cc_str(Name)} days.')
       if c.get_cc(Name) == Days:
-        fields.append(f'Congrats, this potion is finished!')
+        fields.append(f'Congrats| "This potion is finished!')
       else: None
     else:
-      fields.append(f"{c.name} was not able to craft this potion today. Try again tomorrow!")
+      fields.append(f"{c.name} was not able to craft this potion today|Try again tomorrow!")
 else:
   fields.append(f"Oops! There isn't a potion or poison by that name!")
     
