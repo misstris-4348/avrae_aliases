@@ -85,7 +85,7 @@ if found_potion != None:
         c.mod_cc(Name, +1)
       fields.append(f'You have completed:| {c.cc_str(Name)} days.')
       if c.get_cc(Name) == Days:
-        fields.append(f'Congrats| "This potion is finished!')
+        fields.append(f'Congrats|This potion is finished!')
       else: None
     else:
       fields.append(f"{c.name} was not able to craft this potion today|Try again tomorrow!")
