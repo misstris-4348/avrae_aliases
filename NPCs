@@ -2,7 +2,7 @@
 <drac2>
 
 #load gvar with npc data
-npc = load_json(get_gvar("INSERT GVAR CODE HERE"))
+npc = load_json(get_gvar("fd785fc0-632f-4e9f-9e35-827b7749879e"))
 
 #code
 args = &ARGS&
