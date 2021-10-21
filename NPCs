@@ -1,1 +1,40 @@
+!alias npc embed
+<drac2>
 
+#load gvar with npc data
+npc = load_json(get_gvar("INSERT GVAR CODE HERE"))
+
+#code
+args = &ARGS&
+pargs = argparse(args)
+name_of_npc = args[0]
+c = character()
+t = f'{c.name} wants to know more about a NPC.`
+
+found_npc = None
+for item in npc
+  if item['Name'] == name_of_npc
+    found_npc = item
+    
+if found_npc != None:
+  Name = found_npc["Name"]
+  Key = found_npc["Key"]
+  Description = found_npc["Description"]
+  Location = found_npc["Location"]
+  Picture = found_npc["Picture"]
+  fields.append(f"{Name} is a NPC located in {Location}\n**Description:**{Description}\n**NPC Key:**{Key}")
+else:
+  fields.append(f"Oops! There isn't a NPC by that name!")
+  
+#Variables that are for display in the embed only
+footer = "Seventra: Exodus of Heroes | npc | Created by misstris4348 (aka Gaelin)"
+img = {Picture}
+color = '6495ED'  
+</drac2>    
+
+-title "{{t}}"
+{{f'-image "{img}"' if img else ""}}
+{{f'-color "{color}"' if color else ""}}
+{{f'-footer "{footer}"' if footer else ""}}
+{{''.join(['-f "' + field + '"\n' for field in fields]) if len(fields) > 0 else ''}}
+  
