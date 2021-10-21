@@ -9,26 +9,32 @@ args = &ARGS&
 pargs = argparse(args)
 name_of_npc = args[0]
 c = character()
-t = f'{c.name} wants to know more about a NPC.`
+fields = []
+t = f'{c.name} wants to know more about a NPC.'
 
 found_npc = None
-for item in npc
-  if item['Name'] == name_of_npc
+for item in npc:
+  if item['ï»¿Name'] == name_of_npc:
     found_npc = item
     
 if found_npc != None:
-  Name = found_npc["Name"]
+  Name = found_npc["ï»¿Name"]
   Key = found_npc["Key"]
   Description = found_npc["Description"]
   Location = found_npc["Location"]
   Picture = found_npc["Picture"]
-  fields.append(f"{Name} is a NPC located in {Location}\n**Description:**{Description}\n**NPC Key:**{Key}")
+  fields.append(f"**{Name}** is a NPC located in the city of {Location}.")
+  fields.append(f"**NPC Key:** {Key}")
+  fields.append(f"**Description:** {Description}")
+  img = Picture
+  
 else:
   fields.append(f"Oops! There isn't a NPC by that name!")
+  img = "https://cdn.discordapp.com/attachments/858794158378450944/900811560354738236/books-wizard-the-kingkiller-chronicles-kote-wallpaper-preview.jpg"
   
 #Variables that are for display in the embed only
-footer = "Seventra: Exodus of Heroes | npc | Created by misstris4348 (aka Gaelin)"
-img = {Picture}
+footer = "Seventra: Exodus of Heroes | NPCs V1 | Created by misstris4348 (aka Gaelin)"
+
 color = '6495ED'  
 </drac2>    
 
