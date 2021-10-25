@@ -1,0 +1,26 @@
+!alias NPC embed
+<drac2>
+
+#code
+# Code
+args = &ARGS&
+pargs = argparse(args)
+c = character()
+
+#title
+t = f'{c.name} wants to know more about NPCs'
+
+#footer
+footer += "\n" + f'Seventra: Exodus of Heroes | NPCs v1'
+footer += "\nCreators: misstris#4348 (Gaelin)"
+
+data = load_json(get_gvar("PUT GVAR HERE"))
+
+location = data["Location"]
+
+npc = data["Name"]
+
+p = args[0]
+
+
+  
