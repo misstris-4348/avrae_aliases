@@ -1,0 +1,12 @@
+!alias todo embed
+
+-title "My Sever To-do List"
+-desc "Admin/Dragonspeaker Related Projects"
+
+-f "Fish Alias| Need to continue working on adding fish to database, and looking over loot to remove inappropriate ones."
+-f "NPC Alias| Need to add any new NPCs to list and find information about other NPCs missing info."
+-f "Library Alias| Need to start a database of books for check out. Alias will also need to be coded"
+-f "Mossfort| Determine what other attractions could be made for Mossfort and how to best implement them."
+-f "World Map| Find out any additional features that need to be added to the World Map."
+-color 00C2D1
+
