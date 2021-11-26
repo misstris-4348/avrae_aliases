@@ -12,11 +12,41 @@ p = args[0]
 pargs = argparse(args)
 fields = []
 
+if add_to_bag != None:
+  _bag_name = "Coin Pouch"
+  _content = add_to_bag
+
+  __p0__ = "Coin Pouch"
+  __p1__ = add_to_bag
+  _bag_name = __p0__
+  _content = __p1__
+
+  _cv = character().cvars
+  _bags = load_json(_cv["bags"]) if "bags" in _cv else []
+  _bag_index = [i for i, x in enumerate(_bags) if x[0] == _bag_name]
+  _bag_index = _bag_index[0] if len(_bag_index) > 0 else -1
+  if _bag_index == -1:
+    _bags.append([_bag_name, {}])
+    _bag_index = len(_bags) - 1
+  _bag_content = _bags[_bag_index][1]
+  for _key in _content:
+    if _key in _bag_content:
+      _bag_content[_key] = _bag_content[_key] + _content[_key]
+    else:
+      _bag_content[_key] = _content[_key]
+  _bags[_bag_index] = [_bag_name, _bag_content]
+  character().set_cvar('bags', dump_json(_bags))
+
 if p == "th":
   t = f"Gaelin goes to work!"
   adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
   wroll = vroll(cs.sleightOfHand.d20(base_adv = adv_status) + f' + {prof}')
   succ = wroll.total >= DC 
+  prize = wroll.total
+  if succ:
+    add_to_bag 
+    
+    
   fields.append(f'**Thieves Tools Roll-DC 14**|{wroll.full}\n{sl if succ else fl}')
   fields.append(f"Gaelin's Locksmith Services|Gaelin has continued working for the city people as a discreet locksmith so the townsfolk are not embarrassed by locking themselves out.")
   fields.append(f'Advantage|Stormy circles overhead keeping watch as Gaelin works.')
