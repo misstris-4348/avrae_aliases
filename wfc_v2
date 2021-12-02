@@ -1,0 +1,67 @@
+!alias wfc embed
+<drac2>
+
+#variables
+c = character()
+args = &ARGS&
+DC = 14
+prof = proficiencyBonus
+cv, cs = c.cvars, c.skills
+sl, fl = "**Success!**", "**Failure!**"
+p = args[0]
+pargs = argparse(args)
+fields = []
+
+
+
+if p == "th":
+  t = f"Gaelin goes to work!"
+  adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
+  wroll = vroll(cs.sleightOfHand.d20(base_adv = adv_status) + f' + {prof}')
+  succ = wroll.total >= DC 
+  prize = wroll.total * 2 if wroll.result.crit else wroll.total
+  if succ:
+    bags = load_json(character().cvars['bags'])
+    bag_name = 'Coin Pouch'
+    bag_index = [i for i, x in enumerate(bags) if x[0] == bag_name][0]
+    bag_content = bags[bag_index][1]
+    bag_content['gp'] += prize
+    bags[bag_index] = [bag_name, bag_content]
+    character().set_cvar('bags', dump_json(bags))
+  fields.append(f'**Thieves Tools Roll-DC 14**|{wroll.full}\n{sl if succ else fl}')
+  fields.append(f"Gaelin's Locksmith Services|Gaelin has continued working for the city people as a discreet locksmith so the townsfolk are not embarrassed by locking themselves out.")
+  fields.append(f'Advantage|Stormy circles overhead keeping watch as Gaelin works.')
+  fields.append(f'Thieves Tool Proficiency|Proficiency Bonus added from proficiency in Thieves Tools.')
+  img = "https://c4.wallpaperflare.com/wallpaper/187/821/259/painting-sky-fantasy-art-dreamy-wallpaper-preview.jpg"
+  color = 'f06553'
+
+
+elif p == "al":
+  t = f"Gaelin goes to work!"
+  adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
+  aroll = vroll(cs.sleightOfHand.d20(base_adv = adv_status) + f' + {prof}')
+  succ = aroll.total >= DC
+  prize = aroll.total * 2 if aroll.result.crit else aroll.total
+  if succ:
+    bags = load_json(character().cvars['bags'])
+    bag_name = 'Coin Pouch'
+    bag_index = [i for i, x in enumerate(bags) if x[0] == bag_name][0]
+    bag_content = bags[bag_index][1]
+    bag_content['gp'] += prize
+    bags[bag_index] = [bag_name, bag_content]
+    character().set_cvar('bags', dump_json(bags))
+  fields.append(f"**Alchemist's Supplies Roll-DC 14**|{aroll.full}\n{sl if succ else fl}")
+  fields.append(f"Gaelin's Tonic Services|Gaelin has started a new side hustle making energy tonics she calls *Arcane*")
+  fields.append(f'Advantage-Familiar|Stormy uses his wings to fan the flames as she boils her tonic')
+  fields.append(f"Alchemist's Supplies Proficiency|Proficiency Bonus added from proficiency in Alchemist's Supplies") 
+  img = "https://cdna.artstation.com/p/assets/images/images/006/347/004/large/wind-swirl-lost-mana-potion-kopie.jpg?1497906656"
+  color = '4f53a2'
+  
+footer = "Created by misstris4348 (aka Gaelin)"
+   
+</drac2>       
+-title "{{t}}"
+{{f'-image "{img}"' if img else ""}}
+{{f'-color "{color}"' if color else ""}}
+{{''.join(['-f "' + field + '"\n' for field in fields]) if len(fields) > 0 else ''}}
+{{f'-footer "{footer}"' if footer else ""}}
