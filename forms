@@ -4,9 +4,10 @@ pargs = argparse(args)
 c = character()
 cv, cs = c.cvars, c.skills
 name_of_form = args[0]
-fields = []
+f = []
 gvar = '36c5ef16-7bd6-449f-b87a-2ab6276a2a76'
 forms_data = load_json(get_gvar(gvar))
+img = None
 
 footer = 'Darkest Days | Personas and Masks of Saber'
 footer += "\nCreated by misstris#4348 (aka Saber)"
@@ -16,29 +17,28 @@ thumb = 'https://www.dndbeyond.com/avatars/22709/479/1581111423-64817554.jpeg?wi
 
 key = None
 for item in forms_data:
-  if item['Form'] == name_of_form
+  if item['Form'] == name_of_form:
     key = item
 
-if item != None:
-  if not key in forms_data:
+if key == None:
     f.append(f'Oops!|{key} is not a persona or mask of Saber!\nPlease check your spelling and try again!')
-  else:
-    img = key["URL"]
-    Name = key["Name"]
-    Race = key["Race"]
-    Height = key["Height"]
-    Weight = key["Weight"]
-    Appearance = key["Appearance"]
-    Languages = key["Languages"]
-    Personality = key["Personality"]
-    thumb = None
-    fields.append(f"{c.name} transforms into {Name} which has the following properties:\n**Name:**{Name}\n**Race:**{Race  }\n**Height:**{Height}\n**Weight:**{Weight}\n**Appearance:**{Appearance}\n**Languages:**{Languages}\n**Personality:**{Personality}.")
+else:
+  img = key["URL"]
+  Name = key["Name"]
+  Race = key["Race"]
+  Height = key["Height"]
+  Weight = key["Weight"]
+  Appearance = key["Appearance"]
+  Languages = key["Languages"]
+  Personality = key["Personality"]
+  thumb = None
+  f.append(f"{c.name} transforms into {Name}:|\n**Race:**{Race}\n**Height:**{Height}\n**Weight:**{Weight}\n**Appearance:**{Appearance}\n**Languages:**{Languages}\n**Personality:**{Personality}.")
 
 
 </drac2>
 -title "{{title}}"
 {{f'-image "{img}"' if img else ""}}
+{{f'-f "{f}"' if f else ""}}
 {{f'-thumb "{thumb}"' if thumb else ""}}
-{{f'-desc "{desc}"' if desc else ""}}
-{{''.join(['-f "' + field + '"\n' for field in f]) if len(f) > 0 else ''}}
+{{''.join(['-f "' + field + '"\n' for field in fields]) if len(fields) > 0 else ''}}
 {{f'-footer "{footer}"' if footer else ""}}
