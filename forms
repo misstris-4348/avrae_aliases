@@ -3,29 +3,24 @@ args = &ARGS&
 pargs = argparse(args)
 c = character()
 cv, cs = c.cvars, c.skills
-entry = args[0]
+name_of_form = args[0]
+fields = []
 gvar = '36c5ef16-7bd6-449f-b87a-2ab6276a2a76'
-forms = load_json(get_gvar(gvar))
-
-error_msg = 'Oops, what do you want to do?|'
-error_msg += 'To display a persona:\n`!forms show <key>`\n\n'
-error_msg += 'To list all the available personas and masks:\n`!forms list`'
+forms_data = load_json(get_gvar(gvar))
 
 footer = 'Darkest Days | Personas and Masks of Saber'
 footer += "\nCreated by misstris#4348 (aka Saber)"
 
-f = []
-title = img = desc = None
 title = 'Personas and Masks of Saber the Changeling'
 thumb = 'https://www.dndbeyond.com/avatars/22709/479/1581111423-64817554.jpeg?width=150&height=150&fit=crop&quality=95&auto=webp'
 
 key = None
-for item in forms:
-  if item["Name"] == entry
+for item in forms_data:
+  if item['Form'] == name_of_form
     key = item
 
 if item != None:
-  if not key in forms:
+  if not key in forms_data:
     f.append(f'Oops!|{key} is not a persona or mask of Saber!\nPlease check your spelling and try again!')
   else:
     img = key["URL"]
@@ -39,20 +34,6 @@ if item != None:
     thumb = None
     fields.append(f"{c.name} transforms into {Name} which has the following properties:\n**Name:**{Name}\n**Race:**{Race  }\n**Height:**{Height}\n**Weight:**{Weight}\n**Appearance:**{Appearance}\n**Languages:**{Languages}\n**Personality:**{Personality}.")
 
-elif len(args) > 0 and args[0].lower() == 'list':
-  msg = 'Saber currently has the following personas and masks:|'
-  if len(forms) == 0:
-    msg += 'Saber does not have any personas or masks!'
-  else:
-    keys = [x for x in forms.keys()]
-    keys.sort()
-    msg += '\n'.join([f'`{x}`' for x in keys])
-    msg += '\n\nUse `!forms show <key>` to display a forms.'
-  f.append(msg)
-
-else:
-  f.append(error_msg)
-  return ''
 
 </drac2>
 -title "{{title}}"
