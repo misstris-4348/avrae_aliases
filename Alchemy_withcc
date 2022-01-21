@@ -2,10 +2,10 @@
 <drac2>
 
 #Load the gvar with mundane items and convert to variable mundane_items
-mundane_items = load_json(get_gvar("09b59f1f-2369-496f-96df-d7c26cb3f28d"))
+mundane_items = load_json(get_gvar("cd5af1fd-a8b4-41da-8e24-324184a898cf"))
 
 #Load the gvar with magical items and convert to variable magical_items
-magical_items = load_json(get_gvar("58700261-a233-4164-944e-cbd5aad8ceb8"))
+magical_items = load_json(get_gvar("f2b5195c-c903-48f6-858a-4a270c2be9f2"))
 
 # Code
 args = &ARGS&
@@ -51,12 +51,13 @@ if found_potion != None:
       succ = c_roll.total >= mtool_DC
       fields.append(f"{c.name} combines strange ingredients in secret ways to try and make some {Name}…|**Alchemist's Tool Check:** {c_roll.full}\n{sl if succ else fl}’")
       if succ:
+        succ_count = 2 if c_roll.result.crit == 1 else 1 
         if c.cc_exists(Name):
-          c.mod_cc(Name, +1)
+          c.mod_cc(Name, +succ_count)
         else:
           c.create_cc(Name,0,Days,None,None)
           c.set_cc(Name,0)
-          c.mod_cc(Name, +1)
+          c.mod_cc(Name, succ_count)
         fields.append(f'You have completed:| {c.cc_str(Name)} days.')
         if c.get_cc(Name) == Days:
           fields.append(f'Congrats|This potion is finished!')
@@ -79,12 +80,13 @@ if found_potion != None:
     succ = m_roll.total >= mundane_DC
     fields.append(f"{c.name} combines strange ingredients in secret ways to try and make some {Name}…|**Alchemist's Tool Check:** {m_roll.full}\n{sl if succ else fl}")
     if succ:
+      succ_count = 2 if m_roll.result.crit == 1 else 1 
       if c.cc_exists(Name):
-        c.mod_cc(Name, +1)
+        c.mod_cc(Name, succ_count)
       else:
         c.create_cc(Name,0,Days,None,None)
         c.set_cc(Name,0)
-        c.mod_cc(Name, +1)
+        c.mod_cc(Name, succ_count)
       fields.append(f'You have completed:| {c.cc_str(Name)} days.')
       if c.get_cc(Name) == Days:
         fields.append(f'Congrats|This potion is finished!')
