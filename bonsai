@@ -1,3 +1,4 @@
+embed
 <drac2>
 
 #variables
@@ -14,7 +15,7 @@ sl, fl = "**Success!**", "**Failure!**"
 footer = "Created by misstris#4348 (aka Gaelin)"
 
 
-t = f"Gregory tends his bonsai!"
+t = f"{c.name} tends their bonsai!"
 broll = vroll("1d20")
 succ = broll.total >= DC 
 fields.append(f'**Bonsai Tending Roll-DC 12**|{broll.full}\n{sl if succ else fl}')
@@ -32,7 +33,7 @@ if succ:
     fields.append(f'Please pay 20gp for this bonsai.')
   else: None
 else:
-  fields.append(f"{c.name} was not able to grow his bonsai today|Try again tomorrow!")
+  fields.append(f"{c.name} was not able to grow their bonsai today|Try again tomorrow!")
     
 img = "https://cdn.discordapp.com/attachments/904156525680013363/930197165035356240/bonsai.jpg"
 color = '06d6a0'
