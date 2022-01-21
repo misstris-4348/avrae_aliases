@@ -19,12 +19,13 @@ broll = vroll("1d20")
 succ = broll.total >= DC 
 fields.append(f'**Bonsai Tending Roll-DC 12**|{broll.full}\n{sl if succ else fl}')
 if succ:
+  succes_count = 2 if broll.result.crit == 1 else 1
   if c.cc_exists(name):
-    c.mod_cc(name, +1)
+    c.mod_cc(name, succes_count)
   else:
     c.create_cc(name,0,days,None,None)
     c.set_cc(name,0)
-    c.mod_cc(name, +1)
+    c.mod_cc(name, succes_count)
   fields.append(f'You have completed:| {c.cc_str(name)} days.')
   if c.get_cc(name) == days:
     fields.append(f'Congrats|This bonsai is finished!')
