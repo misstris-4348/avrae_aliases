@@ -1,6 +1,6 @@
 !alias items embed
--title "Gaelin's Fishing Tinkets"
--desc "A list of oddities and curiosities fished up in Seventra"
+-title "Gaelin's Trinkets"
+-desc "A list of oddities and curiosities fished up in Seventra or won at Kaizen Temple"
 -f "Crystal Light Cube|A crystal cube with light trapped inside. Squeeze to illuminate a room for 1 round a day."
 -f "Stinky Tincture| A stinky tincture that makes wounds hurt less when applied."
 -f "Volcanic Ash| Box of Volcanic Ash."
@@ -13,6 +13,7 @@
 -f "Drug Sack| A sack containing two pouches of psychedelic mushrooms, a jar of peyote, a quart of tequila, a quart of rum, and a pint of raw ether."
 -f "Ivory Truffle Pig| This ivory statuette of a pig can, once per day, be commanded to grow to full size and seek the nearest source of food, fresh water, or truffles. It remains active for 2 hours before reverting to a figurine."
 -f "Dead Ring| A ring that makes the wearer appear to be dead and rotten."
+-f "Poster | Poster depicting Chance, holding a sword in front of the number 3."
 -footer "Created by misstris4348 (aka Gaelin)"
 -color "FF6F61"
 -thumb "https://s3.amazonaws.com/ganbreederpublic/hires/de85fe442a3d3bb1.jpeg"
