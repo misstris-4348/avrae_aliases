@@ -1,0 +1,42 @@
+!alias wfc embed
+<drac2>
+
+#variables
+c = character()
+args = &ARGS&
+DC = 14
+prof = proficiencyBonus
+cv, cs = c.cvars, c.skills
+sl, fl = "**Success!**", "**Failure!**"
+pargs = argparse(args)
+fields = []
+
+t = f"Klesyos goes to work!"
+adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
+wroll = vroll(cs.intimidation.d20(base_adv = adv_status) + f' + {prof}')
+succ = wroll.total >= DC 
+prize = wroll.total * 2 if wroll.result.crit else wroll.total
+if succ:
+  bags = load_json(character().cvars['bags'])
+  bag_name = 'Coin Pouch'
+  bag_index = [i for i, x in enumerate(bags) if x[0] == bag_name][0]
+  bag_content = bags[bag_index][1]
+  bag_content['gp'] += prize
+  bags[bag_index] = [bag_name, bag_content]
+  character().set_cvar('bags', dump_json(bags))
+fields.append(f'**Intimidation Roll-DC 14**|{wroll.full}\n{sl if succ else fl}')
+fields.append(f"Knight Commander Klesyos|Klesyos patrols the streets of Mossfort as the Knight Commander stopping pickpockets and thieves.")
+fields.append(f'Advantage|Klesyos is astride his trusty elk mount.')
+fields.append(f'Proficiency|Proficiency Bonus added from proficiency in Intimidation.')
+fields.append(f'Well done!|{prize} gold coins have been added to your Coin Pouch')
+img = "https://cdn.discordapp.com/attachments/904156525680013363/963837482145837137/kles.jpg"
+color = '7393B3'
+
+footer = "Created by misstris4348 (aka Gaelin)"
+   
+</drac2>       
+-title "{{t}}"
+{{f'-image "{img}"' if img else ""}}
+{{f'-color "{color}"' if color else ""}}
+{{''.join(['-f "' + field + '"\n' for field in fields]) if len(fields) > 0 else ''}}
+{{f'-footer "{footer}"' if footer else ""}}
