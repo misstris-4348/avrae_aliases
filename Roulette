@@ -1,0 +1,133 @@
+embed <drac2>
+args = &ARGS&
+coinTypes=["cp","sp","ep","gp","pp"]
+coinRates={"cp": 100, "sp": 10, "ep": 2, "gp": 1, "pp" :0.1}
+black=[2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]
+red=[1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+defaultCoin="gp"
+coinPouchName="Coin Pouch"
+DAILY_CAP = 2
+c = character()
+fields = []
+
+help = False if len(args) == 2 else True
+
+footer = None
+
+ROULETTE_TIME_VAR = "_r_dfc_"
+ROULETTE_STATS_VAR = "_r_st_"
+
+roulette_count = 0
+
+bagsLoaded = load_json(bags)
+pouch=([x for x in bagsLoaded if x[0] == 'Coin Pouch'] + [None])[0]
+
+BetType = 'n/a' if help else args[0]
+BetAmount = '0' if help else args[1]
+BetAmount = BetAmount+defaultCoin if BetAmount.isdigit() else BetAmount
+amount = int(''.join([x for x in BetAmount if x in "0123456789-"]))
+coinType =''.join([x for x in BetAmount[1:] if not x.isdigit()])
+help = True if help else (not coinType in coinTypes)
+
+def create_coin_diff_hash(amount, coinType):
+    return {
+        'cp': amount if coinType == 'cp' else 0,
+        'sp': amount if coinType == 'sp' else 0,
+        'ep': amount if coinType == 'ep' else 0,
+        'gp': amount if coinType == 'gp' else 0,
+        'pp': amount if coinType == 'pp' else 0
+    }
+
+roulette_count = None
+#! roulette_count = devrae_f daily_control_init(#P ROULETTE_TIME_VAR #P DAILY_CAP) !#
+##### devrae function insert [daily_control_init] #####
+daily_activity_control = None
+__p0__ = ROULETTE_TIME_VAR
+__p1__ = DAILY_CAP
+# returns current counter and wait time text if any
+_now = time()
+if __p0__ not in character().cvars:
+  __result__ = 0
+  character().set_cvar(__p0__, f"0:0")
+else:
+  _var_parts = character().cvars[__p0__].split(':')
+  _count, _first_time, _wait_time, _is_next_day = int(_var_parts[0]), float(_var_parts[1]), None, False
+  if _count > 0 and _first_time != None:
+    _passed_in_day_since_first_time = _first_time % 86400
+    _next_midnight_after_first_time = _first_time + (86400 - _passed_in_day_since_first_time)
+    if _now > _next_midnight_after_first_time:
+      _is_next_day = True
+  if _is_next_day:
+    __result__ = 0
+    character().set_cvar(__p0__, f"0:0")
+  else:
+    __result__ = _count
+roulette_count = __result__
+##### devrae function end [daily_control_init] #####
+
+footer += f'\nThere is a limit of {DAILY_CAP} roulette attempts per day. You have spun the roulette {roulette_count}x today.'
+
+if roulette_count >= DAILY_CAP:
+    thumb = image
+    f = f'{c.name} is exhausted from so much gambling at the Roulette wheel today...|Come back later!'
+    f += '\n(Roulette resets at midnight UTC)'
+    fields.append(f)
+    return 1
+
+if not help:
+    diff = create_coin_diff_hash(-amount, coinType)
+    character().coinpurse.modify_coins(cp=diff['cp'], sp=diff['sp'], ep=diff['ep'], gp=diff['gp'], pp=diff['pp'])
+    if pouch != None:
+        pouch[1].update({coinType:pouch[1][coinType]-amount})
+        for coin in coinTypes[:-1]:
+            larger = coinTypes[coinTypes.index(coin)+1]
+            rate = int(coinRates[coin]/coinRates[larger])
+            p = pouch[1][coin]//rate
+            if pouch[1][coin] < 0:
+                pouch[1].update({larger:pouch[1][larger]+p,coin:pouch[1][coin]-p*rate})
+
+error = False
+if pouch != None:
+    error = [x for x in pouch[1]if pouch[1][x]<0]
+
+Roll = randint(36)
+result = [Roll]
+result.append('black') if Roll in black else (result.append('red') if Roll in red else result.append('green'))
+result.append('even') if (Roll % 2) == 0 else result.append('odd')
+result.append('high') if Roll >= 19 else result.append ('low')
+winnings = ((2*amount if BetType in ['black','red','high','low','odd','even'] else 35*amount) if BetType in result else 0*amount)
+
+if not help and not error:
+    if pouch != None:
+        pouch[1].update({coinType:pouch[1][coinType]+(winnings)})
+        character().set_cvar("bags",dump_json(bagsLoaded))
+    diff = create_coin_diff_hash(winnings, coinType)
+    character().coinpurse.modify_coins(cp=diff['cp'], sp=diff['sp'], ep=diff['ep'], gp=diff['gp'], pp=diff['pp'])
+    
+#! roulette_count = devrae_f daily_control_increase_counter(#P ROULETTE_TIME_VAR) !#
+##### devrae function insert [daily_control_increase_counter] #####
+roulette_count = None
+__p0__ = ROULETTE_TIME_VAR
+# returns current counter and wait time text if any
+_var_name = __p0__
+_cvars = character().cvars
+if not _var_name in _cvars or _cvars[_var_name] == "0:0":
+  _now = time()
+  character().set_cvar(_var_name, f'1:{_now}')
+  __result__ = 1
+else:
+  _var_parts = _cvars[_var_name].split(':')
+  _count = int(_var_parts[0]) + 1
+  _time = _var_parts[1]
+  character().set_cvar(_var_name, f'{_count}:{_time}')
+  __result__ = _count
+roulette_count = __result__
+##### devrae function end [daily_control_increase_counter] #####
+footer = footer.replace(f'{roulette_count - 1}x today', f'{roulette_count}x today')
+</drac2>
+-title "<name> {{('would like to play roulette!') if help else ('should check their purse.') if error else (f'bet {BetAmount} on {BetType}.')}}"
+-desc "{{(f'To play, enter `!roulette <BetType> <BetAmount>`\n\nBet Types: black, red, even, odd, high, low, green.\nBet Amounts: You may specify coin type, or bet with gold pieces by default.\n\nExample1: `!roulette black 5cp` - Bet 5cp on black.\nExample2: `!roulette even 5sp` - Bet 5sp on even.\nExample3: `!roulette green 10` - Bet 10gp on green.') if help else (('Oh no... you lack the coin to make that bet... Try a smaller bet, or go home and rethink your life...') if error else (f'The ball landed on {result[1]} {result[0]}, winning {winnings}{coinType}'))}}"
+-thumb https://cdn.discordapp.com/attachments/798946342192807956/803013788353429565/images.png -color red
+{{f'-footer "{footer}"' if footer else ""}}
+{{''.join(['-f "' + field + '"\n' for field in fields]) if len(fields) > 0 else ''}}
+-image "https://cdn.discordapp.com/attachments/855908840633270282/988494859000217640/roulette.jpg"
