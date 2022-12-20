@@ -1,0 +1,48 @@
+!alias thunderforge embed
+<drac2> 
+
+#code
+args = &ARGS&
+pargs = argparse(args)
+c = character()
+cv, cs = c.cvars, c.skills
+DC1 = 12
+DC2 = 14
+DC3 = 16
+sl, fl = "**Success!**", "**Failure!**"
+fields = []
+
+t= f"Gaelin attempts the climb Mount Angrav!"
+adv_status = True if pargs.adv() == 1 else False if pargs.adv() == -1 else None
+Aroll = vroll(cs.survival.d20(base_adv = adv_status))
+succ = Aroll.total >= DC1
+fields.append(f"{c.name} sets out on the base of the mountain and begins her climb...|**Survival Check:** {Aroll.full}\n{sl if succ else fl}")
+if succ:
+	fields.append('Gaelin survived the first leg of the journey!')
+	Broll = vroll(cs.survival.d20(base_adv = adv_status))
+	succ = Broll.total >= DC2
+	fields.append(f"{c.name} continues up the base of the mountain fighting the harsh winds...|**Survival Check:** {Broll.full}\n{sl if succ else fl}")
+	if succ:
+		fields.append(f'Gaelin survived the second leg of the journey!')
+		Croll = vroll(cs.survival.d20(base_adv = adv_status))
+		succ = Croll.total >= DC3
+		fields.append(f"{c.name} continues almost to the very top of the mountain...|**Survival Check:** {Croll.full}\n{sl if succ else fl}")	
+		if succ: 
+			fields.append(f'Gaelin survived the third leg of the journey and has successfully climbed Mount Angrav!')
+		else: 
+			fields.append(f'Gaelin was unable to make the climb today!')
+	else: 
+		fields.append(f'Gaelin was unable to make the climb today!')
+else:
+	fields.append(f'Gaelin was unable to make the climb today!')
+
+footer = "Seventra: Exodus of Heroes | Mount Angrav | Created by misstris4348 (aka Gaelin)"
+img = "https://cdn.discordapp.com/attachments/865996982300573736/865997584584540190/MVIMG_20210224_1003032.jpg"
+color = 'a2d2ff'  
+</drac2>    
+
+-title "{{t}}"
+{{f'-image "{img}"' if img else ""}}
+{{f'-color "{color}"' if color else ""}}
+{{f'-footer "{footer}"' if footer else ""}}
+{{''.join(['-f "' + field + '"\n' for field in fields]) if len(fields) > 0 else ''}}
